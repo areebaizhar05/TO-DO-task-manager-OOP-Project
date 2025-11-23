@@ -335,7 +335,7 @@ int main() {
             activityName.setPosition(620, activityY + 10);
             window.draw(activityName);
 
-            sf::Text activityInfo(activities[i].category + " • " + activities[i].dueDate, font, 14);
+            sf::Text activityInfo(activities[i].category + " - " + activities[i].dueDate, font, 14);
             activityInfo.setFillColor(sf::Color(100, 100, 100));
             activityInfo.setPosition(620, activityY + 35);
             window.draw(activityInfo);
