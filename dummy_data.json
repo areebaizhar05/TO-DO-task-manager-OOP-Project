@@ -3,6 +3,9 @@
         {
             "username": "mahnum",
             "password": "abc123",
+            "name": "Mahnum Ahmed",
+            "email": "mahnum@email.com",
+            "bio": "I love coding and pastel UI's!",
             "activities": [
                 {
                     "name": "oop hw",
@@ -25,10 +28,12 @@
                 }
             ]
         },
-
         {
             "username": "rafay",
             "password": "12345",
+            "name": "Rafay Khan",
+            "email": "rafay@email.com",
+            "bio": "",
             "activities": [
                 {
                     "name": "dsa assignment",
@@ -41,10 +46,12 @@
                 }
             ]
         },
-
         {
             "username": "amna",
             "password": "xyz789",
+            "name": "Amna Ali",
+            "email": "amna@email.com",
+            "bio": "AI enthusiast and web developer",
             "activities": [
                 {
                     "name": "ai project",
