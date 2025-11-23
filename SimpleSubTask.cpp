@@ -15,11 +15,11 @@ void SimpleSubTask::display() const {
     cout << status << " " << name << " [" << getPriorityString() << "]";
 }
 
-bool SimpleSubTask::isRecurring() const {
+bool SimpleSubTask::isRecurring() const { // non recurring tasks
     return false;
 }
 
 string SimpleSubTask::getProgress() const {
-    
+
     return completed ? "1/1" : "0/1";
 }

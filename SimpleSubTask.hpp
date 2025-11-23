@@ -10,7 +10,7 @@ public:
     SimpleSubTask(string name, time_t dueDate = 0);
 
     string getType() const override;
-    string getName() const override;
+    // string getName() const override;
     void display() const override;
     bool isRecurring() const override;
     string getProgress() const override;

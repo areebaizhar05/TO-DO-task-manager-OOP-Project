@@ -4,6 +4,14 @@
 #include <SubTask.hpp>
 using namespace std;
 
+// SubTask (abstract base)
+    // ├── SimpleSubTask (one-time tasks)
+    // └── RecurringSubTask (abstract base for recurring)
+            // ├── DailyRecurringSubTask
+            // ├── WeeklyRecurringSubTask
+            // ├── MonthlyRecurringSubTask
+            // └── YearlyRecurringSubTask
+
 class Task {
 private:
     string title; // set a title for your task to be called, eg OOP HW: it will have sub tasks in it like Qs1, project etc tc
@@ -93,5 +101,4 @@ public:
     }
     return subTasks[index - 1]; // because count starts with 1
 }
-
 };
