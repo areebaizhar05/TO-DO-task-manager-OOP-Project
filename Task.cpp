@@ -77,4 +77,21 @@ public:
         bar+= "]" +  to_string(percent) + "%";
         return bar;
     }
+    string getTitle() const {
+        return title;} //getter
+    
+    int getSubTaskCount() const{
+        return subTasks.size();} // getter
+    
+    int getCompletedCount() {
+        updateProgressCount();
+        return completedSubTasks;}
+    
+    SubTask* getSubTask(int index) {
+    if (index < 1 || index > subTasks.size()) {
+        return nullptr;
+    }
+    return subTasks[index - 1]; // because count starts with 1
+}
+
 };
