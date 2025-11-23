@@ -296,7 +296,7 @@ int main() {
         window.draw(title);
 
         // Activity info (category and due date)
-        sf::Text info(activity.category + " • Due " + activity.dueDate, font, 14);
+        sf::Text info(activity.category + " - Due " + activity.dueDate, font, 14);
         info.setFillColor(sf::Color(150, 150, 150));
         info.setPosition(120, 50);
         window.draw(info);
