@@ -6,8 +6,6 @@
 //WONT BE USED LATER
 
 
-
-
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
@@ -324,8 +322,8 @@ int main() {
 
     Screen currentScreen = LOGIN_SIGNUP;
     
-    // Load users from JSON
-    std::string jsonFile = "C:\\Users\\aleen\\TO-DO-task-manager-OOP-Project\\dummy_data.json";
+    // Load users from JSON (one directory up from sfml folder)
+    std::string jsonFile = "../../dummy_data.json";
     std::vector<User> allUsers = JSONManager::loadUsers(jsonFile);
     
     User* currentUser = nullptr;
@@ -462,6 +460,21 @@ int main() {
                 activityNameInput.handleClick(mousePos);
 
                 if (event.type == sf::Event::MouseButtonPressed) {
+                    if (addActivityBtn.isClicked(mousePos)) {
+                        if (!activityNameInput.input.empty() && currentUser) {
+                            Activity newActivity;
+                            newActivity.name = activityNameInput.input;
+                            newActivity.category = "General";
+                            newActivity.progress = 0;
+                            currentUser->activities.push_back(newActivity);
+                            JSONManager::saveUsers(jsonFile, allUsers);
+                            activityNameInput.clear();
+                            std::cout << "Activity added: " << newActivity.name << std::endl;
+                        }
+                    }
+                    if (clearBtn.isClicked(mousePos)) {
+                        activityNameInput.clear();
+                    }
                     if (backBtn.isClicked(mousePos)) {
                         currentScreen = WELCOME;
                     }
@@ -555,39 +568,50 @@ int main() {
             subtitle.setPosition(50, 70);
             window.draw(subtitle);
 
+            // Left panel - Add Activity
+            sf::Text addActivityLabel("Add Activity", font, 20);
+            addActivityLabel.setFillColor(sf::Color::Black);
+            addActivityLabel.setPosition(50, 110);
+            window.draw(addActivityLabel);
+
+            activityNameInput.draw(window);
+            addActivityBtn.draw(window);
+            clearBtn.draw(window);
+
+            // Right panel - All Activities
             sf::Text allActivitiesLabel("All Activities", font, 20);
             allActivitiesLabel.setFillColor(sf::Color::Black);
             allActivitiesLabel.setPosition(600, 110);
             window.draw(allActivitiesLabel);
 
-            float taskY = 160;
+            float activityY = 160;
             for (const auto& activity : currentUser->activities) {
-                sf::RectangleShape taskBox(sf::Vector2f(600, 80));
-                taskBox.setPosition(600, taskY);
-                taskBox.setFillColor(sf::Color(200, 220, 255));
-                window.draw(taskBox);
+                sf::RectangleShape activityBox(sf::Vector2f(600, 80));
+                activityBox.setPosition(600, activityY);
+                activityBox.setFillColor(sf::Color(200, 220, 255));
+                window.draw(activityBox);
 
                 sf::RectangleShape progressBar(sf::Vector2f((activity.progress / 100.0f) * 500, 10));
-                progressBar.setPosition(620, taskY + 50);
+                progressBar.setPosition(620, activityY + 50);
                 progressBar.setFillColor(sf::Color(255, 192, 203));
                 window.draw(progressBar);
 
                 sf::Text activityName(activity.name, font, 18);
                 activityName.setFillColor(sf::Color::Black);
-                activityName.setPosition(620, taskY + 10);
+                activityName.setPosition(620, activityY + 10);
                 window.draw(activityName);
 
                 sf::Text activityInfo(activity.category + " • " + std::to_string(activity.task_list.size()) + " tasks", font, 14);
                 activityInfo.setFillColor(sf::Color(100, 100, 100));
-                activityInfo.setPosition(620, taskY + 35);
+                activityInfo.setPosition(620, activityY + 35);
                 window.draw(activityInfo);
 
                 sf::Text progressText(std::to_string(activity.progress) + "%", font, 14);
                 progressText.setFillColor(sf::Color::Black);
-                progressText.setPosition(1100, taskY + 30);
+                progressText.setPosition(1100, activityY + 30);
                 window.draw(progressText);
 
-                taskY += 100;
+                activityY += 100;
             }
 
             backBtn.draw(window);
