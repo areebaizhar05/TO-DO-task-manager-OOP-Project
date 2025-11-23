@@ -1,25 +1,32 @@
 #include "SimpleSubTask.hpp"
 #include <iostream>
-#include <string>
 
 using namespace std;
 
-SimpleSubTask::SimpleSubTask(string name, time_t dueDate): SubTask(name, dueDate) {}
+SimpleSubTask::SimpleSubTask(string name, Date dueDate) 
+    : SubTask(name, dueDate) {}
 
 string SimpleSubTask::getType() const {
-    return "One time Task";
+    return "One-time Task";
 }
 
 void SimpleSubTask::display() const {
-    string status = completed ? "✓ Completed!" : "✗ Pending "; // for terminal display
+    string status = completed ? "✓ Completed!" : "✗ Pending";
     cout << status << " " << name << " [" << getPriorityString() << "]";
+    
+    if (dueDate.isSet()) {
+        cout << " (Due: " << dueDate.toString();
+        if (dueDate.isOverdue() && !completed) {
+            cout << " - OVERDUE!";
+        }
+        cout << ")";
+    }
 }
 
-bool SimpleSubTask::isRecurring() const { // non recurring tasks
+bool SimpleSubTask::isRecurring() const {
     return false;
 }
 
 string SimpleSubTask::getProgress() const {
-
     return completed ? "1/1" : "0/1";
 }

@@ -2,15 +2,16 @@
 #define SIMPLETASK_H
 
 #include <string>
+#include "SubTask.hpp"
+#include "DateHelper.hpp"
+
 using namespace std;
-#include "SubTask.hpp" 
 
 class SimpleSubTask : public SubTask {
 public:
-    SimpleSubTask(string name, time_t dueDate = 0);
+    SimpleSubTask(string name, Date dueDate = Date());
 
     string getType() const override;
-    // string getName() const override;
     void display() const override;
     bool isRecurring() const override;
     string getProgress() const override;

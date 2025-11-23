@@ -1,36 +1,55 @@
 #include "RecurringSubTask.hpp"
 #include "DateHelper.hpp"
 #include <iostream>
-#include <ctime>
 
 using namespace std;
 
-RecurringSubTask::RecurringSubTask(string name, int target, time_t dueDate)
-    : SubTask(name, dueDate), completionCount(0), targetCount(target) {} // main constructor
+// ============ Base RecurringSubTask Implementation ============
+RecurringSubTask::RecurringSubTask(string name, int target, Date startDate)
+    : SubTask(name, Date()), completionCount(0), targetCount(target) {
+    // If no start date provided, use today
+    this->startDate = startDate.isSet() ? startDate : Date::today();
+    // Calculate and set the final due date automatically
+    this->dueDate = calculateFinalDueDate();
+}
 
 bool RecurringSubTask::isRecurring() const {
-    return true;} // this till be true for this type of tasks
+    return true;
+}
 
 string RecurringSubTask::getProgress() const {
-    return to_string(completionCount) + "/" + to_string(targetCount);} // string output to terminal
+    return to_string(completionCount) + "/" + to_string(targetCount);
+}
 
 void RecurringSubTask::display() const {
     string status = (completionCount >= targetCount) ? "✓ Completed!" : "○ In Progress";
-    cout << status << " " << name << " [" << getPriorityString() << "] - " 
-    << getProgress() << " (" << getRecurrenceString() << ")";}
+    cout << status << " " << name << " [" << getPriorityString() << "] - "
+         << getProgress() << " (" << getRecurrenceString() << ")";
+    
+    if (dueDate.isSet()) {
+        cout << " (Final Due: " << dueDate.toString();
+        if (dueDate.isOverdue() && completionCount < targetCount) {
+            cout << " - OVERDUE!";
+        }
+        cout << ")";
+    }
+}
 
-void RecurringSubTask::incrementCompletion() { // increments occurances completed and if they reach teh max, mark the task completed
+void RecurringSubTask::incrementCompletion() {
     if (completionCount < targetCount) {
         completionCount++;
         if (completionCount >= targetCount) {
             completed = true;
         }
-        dueDate = getNextDueDate();
     }
 }
- 
-time_t RecurringSubTask::getNextDueDate() const {
+
+Date RecurringSubTask::getNextDueDate() const {
     return calculateNextDueDate();
+}
+
+Date RecurringSubTask::getFinalDueDate() const {
+    return dueDate;
 }
 
 int RecurringSubTask::getCompletionCount() const {
@@ -41,55 +60,96 @@ int RecurringSubTask::getTargetCount() const {
     return targetCount;
 }
 
-// daily: 
-DailyRecurringSubTask::DailyRecurringSubTask(string name, int target, time_t dueDate)
-    : RecurringSubTask(name, target, dueDate) {}
+// ============ DailyRecurringSubTask Implementation ============
+DailyRecurringSubTask::DailyRecurringSubTask(string name, int target, Date startDate)
+    : RecurringSubTask(name, target, startDate) {}
+
+string DailyRecurringSubTask::getType() const {
+    return "Daily Recurring Task";
+}
 
 string DailyRecurringSubTask::getRecurrenceString() const {
     return "Daily";
 }
 
-time_t DailyRecurringSubTask::calculateNextDueDate() const {
-    if (dueDate == 0) return 0;
-    return dueDate + (1 * 24 * 60 * 60); // Simple: add 1 day in seconds
+Date DailyRecurringSubTask::calculateNextDueDate() const {
+    // Next occurrence is tomorrow
+    Date today = Date::today();
+    return today.addDays(1);
 }
 
+Date DailyRecurringSubTask::calculateFinalDueDate() const {
+    // For daily task with target 30: final deadline is 30 days from start
+    // Math: 30 days * (24 * 60 * 60) = 30 * 86400 seconds
+    return startDate.addDays(targetCount);
+}
 
-// weekly:
-WeeklyRecurringSubTask::WeeklyRecurringSubTask(string name, int target, time_t dueDate)
-    : RecurringSubTask(name, target, dueDate) {}
+// ============ WeeklyRecurringSubTask Implementation ============
+WeeklyRecurringSubTask::WeeklyRecurringSubTask(string name, int target, Date startDate)
+    : RecurringSubTask(name, target, startDate) {}
+
+string WeeklyRecurringSubTask::getType() const {
+    return "Weekly Recurring Task";
+}
 
 string WeeklyRecurringSubTask::getRecurrenceString() const {
     return "Weekly";
 }
 
-time_t WeeklyRecurringSubTask::calculateNextDueDate() const {
-    if (dueDate == 0) return 0;
-    return dueDate + (7 * 24 * 60 * 60); // Simple: add 7 days in seconds
+Date WeeklyRecurringSubTask::calculateNextDueDate() const {
+    // Next occurrence is next week
+    Date today = Date::today();
+    return today.addWeeks(1);
 }
 
-// monthly:
-MonthlyRecurringSubTask::MonthlyRecurringSubTask(string name, int target, time_t dueDate)
-    : RecurringSubTask(name, target, dueDate) {}
+Date WeeklyRecurringSubTask::calculateFinalDueDate() const {
+    // For weekly task with target 6: final deadline is 6 weeks from start
+    // Math: 6 weeks * 7 days * (24 * 60 * 60) = 42 * 86400 seconds
+    return startDate.addWeeks(targetCount);
+}
+
+// ============ MonthlyRecurringSubTask Implementation ============
+MonthlyRecurringSubTask::MonthlyRecurringSubTask(string name, int target, Date startDate)
+    : RecurringSubTask(name, target, startDate) {}
+
+string MonthlyRecurringSubTask::getType() const {
+    return "Monthly Recurring Task";
+}
 
 string MonthlyRecurringSubTask::getRecurrenceString() const {
     return "Monthly";
 }
 
-time_t MonthlyRecurringSubTask::calculateNextDueDate() const {
-    if (dueDate == 0) return 0;
-    return dueDate + (30 * 24 * 60 * 60); // Simple: add 30 days in seconds
+Date MonthlyRecurringSubTask::calculateNextDueDate() const {
+    // Next occurrence is next month
+    Date today = Date::today();
+    return today.addMonths(1);
 }
 
-//yearly:
-YearlyRecurringSubTask::YearlyRecurringSubTask(string name, int target, time_t dueDate)
-    : RecurringSubTask(name, target, dueDate) {}
+Date MonthlyRecurringSubTask::calculateFinalDueDate() const {
+    // For monthly task with target 7: final deadline is 7 months from start
+    return startDate.addMonths(targetCount);
+}
+
+// ============ YearlyRecurringSubTask Implementation ============
+YearlyRecurringSubTask::YearlyRecurringSubTask(string name, int target, Date startDate)
+    : RecurringSubTask(name, target, startDate) {}
+
+string YearlyRecurringSubTask::getType() const {
+    return "Yearly Recurring Task";
+}
 
 string YearlyRecurringSubTask::getRecurrenceString() const {
     return "Yearly";
 }
 
-time_t YearlyRecurringSubTask::calculateNextDueDate() const {
-    if (dueDate == 0) return 0;
-    return dueDate + (365 * 24 * 60 * 60); // Simple: add 365 days in seconds
+Date YearlyRecurringSubTask::calculateNextDueDate() const {
+    // Next occurrence is next year
+    Date today = Date::today();
+    return today.addYears(1);
+}
+
+Date YearlyRecurringSubTask::calculateFinalDueDate() const {
+    // For yearly task with target 5: final deadline is 5 years from start
+    return startDate.addYears(targetCount);
 }

@@ -3,73 +3,90 @@
 
 #include <string>
 #include "SubTask.hpp"
+#include "DateHelper.hpp"
+
 using namespace std;
 
 // Base Recurring Task class which will be inherited by 4 other classes
 class RecurringSubTask : public SubTask {
 protected:
     int completionCount; // how many times completed so far
-    int targetCount; // how many times NEED to compelted in total
-    virtual time_t calculateNextDueDate() const = 0; // everychild class will have its own duedate calculted
+    int targetCount; // how many times NEED to be completed in total
+    Date startDate; // When the task started
+    
+    virtual Date calculateNextDueDate() const = 0; // each child class will have its own duedate calculated
+    virtual Date calculateFinalDueDate() const = 0; // auto-calculate final deadline
 
 public:
-    RecurringSubTask(string name, int target, time_t dueDate = 0);
+    RecurringSubTask(string name, int target, Date startDate = Date());
     virtual ~RecurringSubTask() = default;
 
-    bool isRecurring() const override; // this will be true  always for this type for task
+    bool isRecurring() const override; // this will be true always for this type of task
     string getProgress() const override;
     void display() const override;
 
-    time_t getNextDueDate() const override; // this is overrriden from the subtask
+    Date getNextDueDate() const override; // this is overridden from the subtask
+    Date getFinalDueDate() const;
     
-    virtual string getRecurrenceString() const = 0; // name of the type of reurrence
+    virtual string getRecurrenceString() const = 0; // name of the type of recurrence
     
     void incrementCompletion(); // increases the completion count each time the task is done
-    int getCompletionCount() const; // getter for completion count since this class will be inherited 
+    int getCompletionCount() const; // getter for completion count since this class will be inherited
     int getTargetCount() const; // getter for target count since this will be inherited
 };
 
-// INHERTIED 4 TYPES OF RECURRING TASKS ( DAILY, WEEKLY, MONTHLY, YEARLY)
+// INHERITED 4 TYPES OF RECURRING TASKS (DAILY, WEEKLY, MONTHLY, YEARLY)
+
 // Daily Recurring Task
 class DailyRecurringSubTask : public RecurringSubTask {
-    protected:
-        time_t calculateNextDueDate() const override; 
+protected:
+    Date calculateNextDueDate() const override;
+    Date calculateFinalDueDate() const override;
+
 public:
-    DailyRecurringSubTask(string name, int target = 7, time_t dueDate = 0); // by default teh target will be set 7 but user CAN input number of days they want the task to repeat (basically acts like number of instances done for this sub task)
+    DailyRecurringSubTask(string name, int target = 7, Date startDate = Date());
     
-    string getRecurrenceString() const override; // it returns the name of the type of recurence (useful for cout options in main)
-    time_t calculateNextDueDate() const override; // timeinfo
-    // time_t getNextDueDate() const override;
+    string getType() const override;
+    string getRecurrenceString() const override;
 };
 
 // Weekly Recurring Task
 class WeeklyRecurringSubTask : public RecurringSubTask {
+protected:
+    Date calculateNextDueDate() const override;
+    Date calculateFinalDueDate() const override;
+
 public:
-    WeeklyRecurringSubTask(string name, int target = 4, time_t dueDate = 0);
+    WeeklyRecurringSubTask(string name, int target = 4, Date startDate = Date());
     
+    string getType() const override;
     string getRecurrenceString() const override;
-    time_t calculateNextDueDate() const override;
-    // time_t getNextDueDate() const override;
 };
 
 // Monthly Recurring Task
 class MonthlyRecurringSubTask : public RecurringSubTask {
+protected:
+    Date calculateNextDueDate() const override;
+    Date calculateFinalDueDate() const override;
+
 public:
-    MonthlyRecurringSubTask(string name, int target = 12, time_t dueDate = 0);
+    MonthlyRecurringSubTask(string name, int target = 12, Date startDate = Date());
     
+    string getType() const override;
     string getRecurrenceString() const override;
-    time_t calculateNextDueDate() const override;
-    // time_t getNextDueDate() const override;
 };
 
 // Yearly Recurring Task
 class YearlyRecurringSubTask : public RecurringSubTask {
+protected:
+    Date calculateNextDueDate() const override;
+    Date calculateFinalDueDate() const override;
+
 public:
-    YearlyRecurringSubTask(string name, int target = 5, time_t dueDate = 0);
+    YearlyRecurringSubTask(string name, int target = 5, Date startDate = Date());
     
+    string getType() const override;
     string getRecurrenceString() const override;
-    time_t calculateNextDueDate() const override;
-    // time_t getNextDueDate() const override;
 };
 
 #endif
