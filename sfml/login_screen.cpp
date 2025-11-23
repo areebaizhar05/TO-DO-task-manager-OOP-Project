@@ -3,35 +3,41 @@
 
 class InputBox {
 public:
+    // textbox
     sf::RectangleShape rect;
     sf::Text text;
     sf::Text placeholder;
     std::string input;
     bool focused = false;
 
+    // constructor
     InputBox(float x, float y, float w, float h, const std::string& placeHolder, const sf::Font& font) {
+        // textbox of w x h width with light grey background, thin grey border
         rect.setSize(sf::Vector2f(w, h));
         rect.setPosition(x, y);
         rect.setFillColor(sf::Color(240, 240, 240));
         rect.setOutlineColor(sf::Color(200, 200, 200));
         rect.setOutlineThickness(1);
 
+        // default/placeholder text in grey when no input in box
         placeholder.setString(placeHolder);
         placeholder.setFont(font);
         placeholder.setCharacterSize(16);
         placeholder.setFillColor(sf::Color(180, 180, 180));
         placeholder.setPosition(x + 10, y + 8);
 
+        // text input
         text.setFont(font);
         text.setCharacterSize(16);
         text.setFillColor(sf::Color::Black);
         text.setPosition(x + 10, y + 8);
     }
 
+    // was mouse clicked inside box? yes/no
     bool isClicked(sf::Vector2f pos) {
         return rect.getGlobalBounds().contains(pos);
     }
-
+    // if yes then change outline to blue so its the focus box
     void handleClick(sf::Vector2f pos) {
         focused = isClicked(pos);
         if (focused) {
@@ -40,7 +46,7 @@ public:
             rect.setOutlineColor(sf::Color(200, 200, 200));
         }
     }
-
+    // if box focused then enter text (max 50 chars) by typing keys
     void handleKeyPress(sf::Event& event) {
         if (!focused) return;
         
@@ -73,28 +79,34 @@ public:
 
 class Button {
 public:
+    // button's visual (box + label text + is mouse hovering over it?)
     sf::RectangleShape rect;
     sf::Text text;
     bool hovered = false;
 
+    // constructor
     Button(float x, float y, float w, float h, const std::string& label, const sf::Font& font) {
-        rect.setSize(sf::Vector2f(w, h));
-        rect.setPosition(x, y);
-        rect.setFillColor(sf::Color(255, 182, 193));
+        rect.setSize(sf::Vector2f(w, h));  // button of w x h pixels
+        rect.setPosition(x, y);  
+        rect.setFillColor(sf::Color(255, 182, 193));  //light pink
         
+        //button text
         text.setString(label);
         text.setFont(font);
         text.setCharacterSize(18);
         text.setFillColor(sf::Color::Black);
         
+        //centering text within dimensions
         auto bounds = text.getLocalBounds();
         text.setPosition(x + (w - bounds.width) / 2, y + (h - bounds.height) / 2 - 5);
     }
 
+    // button clicked status
     bool isClicked(sf::Vector2f pos) {
         return rect.getGlobalBounds().contains(pos);
     }
 
+    // hover effect (darker pink when mouse over it)
     void update(sf::Vector2f pos) {
         hovered = rect.getGlobalBounds().contains(pos);
         if (hovered) {
@@ -117,12 +129,12 @@ int main() {
     sf::Font font;
     font.loadFromFile("arial.ttf");
 
-    // Input boxes
+    // Input boxes (x, y, w , h)
     InputBox usernameInput(300, 200, 600, 50, "Username", font);
     InputBox passwordInput(300, 280, 600, 50, "Password", font);
     InputBox emailInput(300, 360, 600, 50, "Email", font);
 
-    // Buttons
+    // Buttons (x, y, w , h)
     Button loginBtn(300, 450, 280, 50, "Login", font);
     Button signupBtn(620, 450, 280, 50, "Sign Up", font);
 
@@ -144,7 +156,7 @@ int main() {
                     std::cout << "Login clicked with username: " << usernameInput.input << std::endl;
                 }
                 if (signupBtn.isClicked(mousePos)) {
-                    std::cout << "Sign Up clicked with email: " << emailInput.input << std::endl;
+                    std::cout << "Sign Up clicked with username: " << usernameInput.input <<" and password: " << passwordInput.input << " and email: " << emailInput.input << std::endl;
                 }
             }
 
