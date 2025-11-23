@@ -14,16 +14,48 @@ private:
 
 public:
     Task(string title);
-    ~Task();
+    ~Task(){
+        for (auto st: subTasks){
+            delete st; // saving memory leak
+        }
+        subTasks.clear();}
 
     void addSubTask(SubTask* st){ 
         subTasks.push_back(st); //added the task to the list
+        updateProgressCount(); // because the progress count will change
+    }
+    void removeSubTask(int index){
+        if (index < 1 || index > subTasks.size()) {
+        cout << "Invalid number! Try again.\n";
+        return;}
+
+    // Convert to 0-based index
+    int realIndex = index - 1;
+    SubTask* toDelete = subTasks[realIndex];
+
+    cout << "Deleted: " << toDelete->getName() << endl;
+    delete toDelete;
+    subTasks.erase(subTasks.begin() + realIndex);
+    updateProgressCount();
     }
 
-    void display() const;
+
+
+    void display() const{
+        cout << "\n=== " << title << " ===" << endl;
+        cout << getProgressBar() << endl;
+
+        if (subTasks.empty()) {
+            cout << " No Subtasks!\n";
+            return;
+        }
+
+        for (size_t i = 0; i < subTasks.size(); ++i) {
+            cout << "  " << (i + 1) << ". ";
+            subTasks[i]->display();
+        }}
     
-    // NEW: Progress tracking
-    void updateProgressCount(){
+    void updateProgressCount(){ // keep track of subtasks done
         totalSubTasks = subTasks.size(); 
         completedSubTasks = 0; // initally its 0
 
@@ -34,12 +66,12 @@ public:
     }                 
     float getProgressPercent() const{
         if (totalSubTasks ==0) return 100.0;
-        return float(((completedSubTasks)/totalSubTasks)*100);  // 0.0-100.0 is range
+        return (float(completedSubTasks) / totalSubTasks) * 100;  // 0.0-100.0 is range
     }           
     string getProgressBar() const{
         int percent = int(getProgressPercent()); 
         int filled = percent / 10; // 10 blocks =100%
-        string bar = "[]";
+        string bar = "[";
         for (int i =0; i<10; i++){
             bar+= (i<filled) ? "█" : " ";}
         bar+= "]" +  to_string(percent) + "%";
