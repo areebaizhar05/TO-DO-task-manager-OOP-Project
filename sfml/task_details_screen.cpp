@@ -24,10 +24,12 @@ struct Activity {
     
     char getEmotion() const {
         int progress = getProgress();
-        if (progress <= 25) return '1'; // Sad
-        if (progress <= 50) return '2'; // Neutral
-        if (progress <= 75) return '3'; // Excited
-        return '4'; // Ecstatic
+        if (progress == 100) return '5'; // Ecstatic
+        if (progress >= 80) return '4'; // Smiling
+        if (progress >= 60) return '3'; // Excited
+        if (progress >= 40) return '2'; // Neutral
+        if (progress >= 20) return '1'; // Worried
+        return '0'; // Sad
     }
 };
 
@@ -179,9 +181,11 @@ public:
 };
 
 std::string getEmotionEmoji(char emotion) {
-    if (emotion == '1') return ":("; // Sad
-    if (emotion == '2') return ":|"; // Neutral
-    if (emotion == '3') return ":O"; // Excited
+    if (emotion == '0') return ":(";  // Sad
+    if (emotion == '1') return ":/";  // Worried
+    if (emotion == '2') return ":]";  // Neutral
+    if (emotion == '3') return ":O";  // Excited
+    if (emotion == '4') return ":)";  // Smiling
     return ":D"; // Ecstatic
 }
 
@@ -210,8 +214,10 @@ int main() {
 
     InputBox addTaskInput(150, 500, 600, 40, "Add a subtask (e.g., research)", font);
     Button addTaskBtn(770, 500, 100, 40, "Add Task", font);
-    Button deleteActivityBtn(770, 570, 150, 40, "Delete Activity", font);
+    Button deleteTaskBtn(770, 570, 150, 40, "Delete Task", font);
     Button closeBtn(880, 30, 100, 40, "Close", font);
+
+    int selectedTaskIndex = -1;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -230,6 +236,7 @@ int main() {
                     if (checkboxes[i].isClicked(mousePos)) {
                         checkboxes[i].toggle();
                         activity.tasks[i].completed = checkboxes[i].checked;
+                        selectedTaskIndex = i;
                         std::cout << "Task '" << activity.tasks[i].name << "' toggled to " 
                                   << (activity.tasks[i].completed ? "completed" : "incomplete") << std::endl;
                     }
@@ -244,8 +251,15 @@ int main() {
                     }
                 }
 
-                if (deleteActivityBtn.isClicked(mousePos)) {
-                    std::cout << "Delete activity clicked" << std::endl;
+                if (deleteTaskBtn.isClicked(mousePos)) {
+                    if (selectedTaskIndex != -1 && selectedTaskIndex < (int)activity.tasks.size()) {
+                        std::cout << "Task '" << activity.tasks[selectedTaskIndex].name << "' deleted" << std::endl;
+                        activity.tasks.erase(activity.tasks.begin() + selectedTaskIndex);
+                        checkboxes.erase(checkboxes.begin() + selectedTaskIndex);
+                        selectedTaskIndex = -1;
+                    } else {
+                        std::cout << "No task selected to delete" << std::endl;
+                    }
                 }
 
                 if (closeBtn.isClicked(mousePos)) {
@@ -258,7 +272,7 @@ int main() {
         }
 
         addTaskBtn.update(mousePos);
-        deleteActivityBtn.update(mousePos);
+        deleteTaskBtn.update(mousePos);
         closeBtn.update(mousePos);
 
         // Draw
@@ -292,6 +306,14 @@ int main() {
         // Tasks section
         float taskY = 150;
         for (size_t i = 0; i < activity.tasks.size(); ++i) {
+            // Highlight selected task
+            if (i == (size_t)selectedTaskIndex) {
+                sf::RectangleShape highlight(sf::Vector2f(900, 50));
+                highlight.setPosition(40, taskY);
+                highlight.setFillColor(sf::Color(255, 240, 245));
+                window.draw(highlight);
+            }
+
             checkboxes[i].draw(window);
 
             sf::Text taskName(activity.tasks[i].name, font, 18);
@@ -330,7 +352,7 @@ int main() {
         progressText.setPosition(40, 600);
         window.draw(progressText);
 
-        deleteActivityBtn.draw(window);
+        deleteTaskBtn.draw(window);
 
         window.display();
     }
