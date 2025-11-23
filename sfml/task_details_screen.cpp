@@ -336,18 +336,20 @@ int main() {
         // Progress section
         float progress = activity.getProgress();
         
+        //grey bar
         sf::RectangleShape progressBarBg(sf::Vector2f(400, 20));
-        progressBarBg.setPosition(150, 600);
+        progressBarBg.setPosition(250, 600);
         progressBarBg.setFillColor(sf::Color(220, 220, 220));
         window.draw(progressBarBg);
 
+        // actual progress/pink bar
         sf::RectangleShape progressBar(sf::Vector2f((progress / 100.0f) * 400, 20));
-        progressBar.setPosition(150, 600);
+        progressBar.setPosition(250, 600);
         progressBar.setFillColor(sf::Color(255, 192, 203));
         window.draw(progressBar);
 
         sf::Text progressText(std::to_string((int)activity.tasks.size()) + " / " + 
-                            std::to_string((int)activity.tasks.size()) + " tasks complete", font, 14);
+                            std::to_string((int)activity.tasks.size()) + " tasks completed  ------>", font, 14);
         progressText.setFillColor(sf::Color::Black);
         progressText.setPosition(40, 600);
         window.draw(progressText);
