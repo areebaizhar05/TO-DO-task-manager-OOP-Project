@@ -11,7 +11,7 @@ string SimpleSubTask::getType() const {
 }
 
 void SimpleSubTask::display() const {
-    string status = completed ? "✓ Completed!" : "✗ Pending "; // simple if else 
+    string status = completed ? "✓ Completed!" : "✗ Pending "; // for terminal display
     cout << status << " " << name << " [" << getPriorityString() << "]";
 }
 

@@ -4,6 +4,8 @@ using namespace std;
 #include <string>
 #include <ctime>
 
+
+// THIS IS AN ABSTRACT CLASS
 enum class Priority { LOW, MEDIUM, HIGH };
 
 class SubTask {
@@ -26,9 +28,9 @@ public:
 
     virtual string getType() const = 0;
     virtual void display() const;
-    virtual bool isRecurring() const = 0;
-    virtual string getProgress() const = 0;
-    virtual time_t getNextDueDate() const;
+    virtual bool isRecurring() const = 0; // all these will be overridden in the recurring and simple tasks
+    virtual string getProgress() const = 0; 
+    virtual time_t getNextDueDate() const; // when is due date for a subtask
 
     time_t getDueDate() const { return dueDate; }
     void setDueDate(time_t date) { dueDate = date;}

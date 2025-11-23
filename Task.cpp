@@ -37,7 +37,7 @@ public:
         cout << "Invalid number! Try again.\n";
         return;}
 
-    // Convert to 0-based index
+    // Convert to 0 index order
     int realIndex = index - 1;
     SubTask* toDelete = subTasks[realIndex];
 
