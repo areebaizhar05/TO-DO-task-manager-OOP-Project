@@ -1,0 +1,72 @@
+{
+    "users": [
+        {
+            "username": "mahnum",
+            "password": "abc123",
+            "activities": [
+                {
+                    "name": "oop hw",
+                    "category": "university",
+                    "task_list": [
+                        { "task": "q1 constructor", "status": "complete" },
+                        { "task": "q2 dynamic arrays", "status": "incomplete" }
+                    ],
+                    "progress": 50
+                },
+                {
+                    "name": "db lab",
+                    "category": "university",
+                    "task_list": [
+                        { "task": "q1 joins", "status": "complete" },
+                        { "task": "q2 triggers", "status": "complete" },
+                        { "task": "q3 stored proc", "status": "complete" }
+                    ],
+                    "progress": 100
+                }
+            ]
+        },
+
+        {
+            "username": "rafay",
+            "password": "12345",
+            "activities": [
+                {
+                    "name": "dsa assignment",
+                    "category": "university",
+                    "task_list": [
+                        { "task": "linked list impl", "status": "incomplete" },
+                        { "task": "stack ops", "status": "incomplete" }
+                    ],
+                    "progress": 0
+                }
+            ]
+        },
+
+        {
+            "username": "amna",
+            "password": "xyz789",
+            "activities": [
+                {
+                    "name": "ai project",
+                    "category": "semester project",
+                    "task_list": [
+                        { "task": "dataset cleanup", "status": "complete" },
+                        { "task": "model training", "status": "incomplete" },
+                        { "task": "evaluation", "status": "incomplete" }
+                    ],
+                    "progress": 33
+                },
+                {
+                    "name": "web dev",
+                    "category": "personal",
+                    "task_list": [
+                        { "task": "navbar", "status": "complete" },
+                        { "task": "login form", "status": "complete" },
+                        { "task": "dashboard css", "status": "incomplete" }
+                    ],
+                    "progress": 66
+                }
+            ]
+        }
+    ]
+}
