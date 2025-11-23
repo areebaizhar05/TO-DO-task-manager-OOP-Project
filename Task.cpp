@@ -3,8 +3,7 @@
 #include <vector>
 using namespace std;
 
-class TaskList{
-    string tasklist_type;
-    vector <Task> tasks;
+class Task{
+    string taskName;
 
 };
