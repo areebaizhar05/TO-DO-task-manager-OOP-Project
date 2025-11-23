@@ -1,12 +1,12 @@
 #ifndef TASK_H
 #define TASK_H
-
+using namespace std;
 #include <string>
 #include <ctime>
 
 enum class Priority { LOW, MEDIUM, HIGH };
 
-class Task {
+class SubTask {
 protected:
     std::string name;
     time_t dueDate;
@@ -14,23 +14,24 @@ protected:
     Priority priority;
 
 public:
-    Task(std::string name, time_t dueDate = 0);
-    virtual ~Task() = default;
+    SubTask(std::string name, time_t dueDate = 0);
+    virtual ~SubTask() = default;
 
     void markCompleted();
     bool isCompleted() const;
-    virtual std::string getName() const;   // <-- made const
+    virtual string getName() const;   // <-- made const
     Priority getPriority() const;
-    std::string getPriorityString() const;
+    string getPriorityString() const;
     void calculatePriority();
 
-    virtual std::string getType() const = 0;
+    virtual string getType() const = 0;
     virtual void display() const;
-    virtual bool isRecurring() const;
-    virtual std::string getProgress() const;
+    virtual bool isRecurring() const = 0;
+    virtual string getProgress() const = 0;
     virtual time_t getNextDueDate() const;
 
     time_t getDueDate() const { return dueDate; }
+    void setDueDate(time_t date) { dueDate = date;}
 };
 
 #endif

@@ -3,11 +3,11 @@
 
 #include <string>
 using namespace std;
-#include "SubTask.hpp"   // <-- fixed include
+#include "SubTask.hpp" 
 
-class SimpleTask : public Task {
+class SimpleSubTask : public SubTask {
 public:
-    SimpleTask(string name, time_t dueDate = 0);
+    SimpleSubTask(string name, time_t dueDate = 0);
 
     string getType() const override;
     string getName() const override;
