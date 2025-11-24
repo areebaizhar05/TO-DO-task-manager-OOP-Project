@@ -1,7 +1,10 @@
+#ifndef TASK_CPP
+#define TASK_CPP//header guards since we're not using a seperate hpp file
+
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SubTask.hpp>
+#include "SubTask.hpp"
 using namespace std;
 
 // SubTask (abstract base)
@@ -16,12 +19,15 @@ class Task {
 private:
     string title; // set a title for your task to be called, eg OOP HW: it will have sub tasks in it like Qs1, project etc tc
     vector<SubTask*> subTasks; // one task is like a list, user can make many of these TASKS and tasks will have subtasks
-
+    string category;
     int totalSubTasks = 0;
     int completedSubTasks = 0; // these two calculations are to get the percentage of a task done so far for the emotes
 
 public:
-    Task(string title);
+     // ADD THIS CONSTRUCTOR IMPLEMENTATION:
+    Task(string title, string category = "general") 
+        : title(title), category(category), totalSubTasks(0), completedSubTasks(0) {}
+    
     ~Task(){
         for (auto st: subTasks){
             delete st; // saving memory leak
@@ -61,6 +67,7 @@ public:
         for (size_t i = 0; i < subTasks.size(); ++i) {
             cout << "  " << (i + 1) << ". ";
             subTasks[i]->display();
+            cout << endl;
         }}
     
     void updateProgressCount(){ // keep track of subtasks done
@@ -87,7 +94,7 @@ public:
     }
     string getTitle() const {
         return title;} //getter
-    
+    string getCategory() const { return category; }
     int getSubTaskCount() const{
         return subTasks.size();} // getter
     
@@ -102,3 +109,4 @@ public:
     return subTasks[index - 1]; // because count starts with 1
 }
 };
+#endif

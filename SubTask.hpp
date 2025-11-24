@@ -1,18 +1,17 @@
-#ifndef TASK_H
-#define TASK_H
+#ifndef SUBTASK_H
+#define SUBTASK_H
 
 #include <string>
 #include "DateHelper.hpp"
 
 using namespace std;
 
-// THIS IS AN ABSTRACT CLASS
 enum class Priority { LOW, MEDIUM, HIGH };
 
 class SubTask {
 protected:
     string name;
-    Date dueDate;  // Changed from time_t to Date
+    Date dueDate;
     bool completed;
     Priority priority;
 
@@ -33,9 +32,8 @@ public:
     virtual string getProgress() const = 0;
     virtual Date getNextDueDate() const;
 
-    Date getDueDate() const { return dueDate; }
-    void setDueDate(Date date) { dueDate = date; }
-    string getDueDateString() const { return dueDate.toString(); }
+    Date getDueDate() const;
+    void setDueDate(Date date);
 };
 
 #endif

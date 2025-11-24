@@ -1,0 +1,32 @@
+{
+    "users": [
+        {
+            "username": "manny",
+            "password": "1234",
+            "name": "Mahnum Ahmed",
+            "email": "mahnumahmed@email.com",
+            "bio": "",
+            "activities": [
+                {
+                    "name": "OOP HW",
+                    "category": "Personal",
+                    "task_list": [
+                        { "task": "Q1", "status": "incomplete" },
+                        { "task": "Q2", "status": "complete" },
+                        { "task": "Q2", "status": "incomplete" }
+                    ],
+                    "progress": 33
+                },
+                {
+                    "name": "DB proposal",
+                    "category": "Uni",
+                    "task_list": [
+                        { "task": "prep", "status": "complete" },
+                        { "task": "draft", "status": "complete" }
+                    ],
+                    "progress": 100
+                }
+            ]
+        }
+    ]
+}
