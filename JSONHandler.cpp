@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 
 std::string JSONHandler::trim(const std::string& str) {
     size_t start = str.find_first_not_of(" \t\n\r");
@@ -26,6 +27,7 @@ std::string JSONHandler::getJSONValue(const std::string& json, const std::string
     return json.substr(start + 1, end - start - 1);
 }
 
+// === THIS IS THE FIXED FUNCTION ===
 std::vector<std::string> JSONHandler::getJSONArray(const std::string& json, const std::string& key) {
     std::vector<std::string> result;
     std::string search = "\"" + key + "\":";
@@ -36,11 +38,27 @@ std::vector<std::string> JSONHandler::getJSONArray(const std::string& json, cons
     size_t start = json.find("[", pos);
     if (start == std::string::npos) return result;
     
-    size_t end = json.find("]", start);
-    if (end == std::string::npos) return result;
+    // NEW LOGIC: Count brackets to handle nested arrays (like task_list inside activities)
+    size_t end = start;
+    int bracketCount = 0;
+    bool foundEnd = false;
+
+    for (size_t i = start; i < json.length(); i++) {
+        if (json[i] == '[') bracketCount++;
+        if (json[i] == ']') bracketCount--;
+        
+        if (bracketCount == 0) {
+            end = i;
+            foundEnd = true;
+            break;
+        }
+    }
+    
+    if (!foundEnd) return result;
     
     std::string arrayStr = json.substr(start + 1, end - start - 1);
     
+    // Split items by comma, respecting curly braces {}
     size_t itemStart = 0;
     int braceCount = 0;
     
@@ -80,7 +98,9 @@ bool JSONHandler::loadFromJSON(const std::string& filename, std::map<std::string
     for (const auto& userJSON : usersArray) {
         User* user = parseUser(userJSON);
         if (user) {
-            userDatabase[user->getUsername()] = user;
+            std::string lowerKey = user->getUsername();
+            std::transform(lowerKey.begin(), lowerKey.end(), lowerKey.begin(), ::tolower);
+            userDatabase[lowerKey] = user;
             parseActivities(user, userJSON);
         }
     }
@@ -117,12 +137,10 @@ void JSONHandler::parseActivities(User* user, const std::string& userJSON) {
         std::string category = getJSONValue(activityJSON, "category");
         
         if (!taskName.empty()) {
-            // Create Task (activities in JSON = Tasks in code)
             user->createTask(taskName, category);
             Task* task = user->getTask(taskName);
             
             if (task) {
-                // Parse subtasks (task_list in JSON = SubTasks in code)
                 std::vector<std::string> subtasksArray = getJSONArray(activityJSON, "task_list");
                 
                 for (const auto& subTaskJSON : subtasksArray) {
@@ -137,6 +155,7 @@ void JSONHandler::parseActivities(User* user, const std::string& userJSON) {
                         task->addSubTask(subTask);
                     }
                 }
+                task->updateProgressCount(); 
             }
         }
     }

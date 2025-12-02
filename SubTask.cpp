@@ -10,7 +10,7 @@ SubTask::SubTask(string name, Date dueDate)
 
 void SubTask::markCompleted() {
     completed = true;
-    cout << "✅ Task marked as completed!" << endl;
+    cout << "Task marked as completed!" << endl;
 }
 
 bool SubTask::isCompleted() const {

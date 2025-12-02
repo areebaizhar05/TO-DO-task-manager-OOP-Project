@@ -1,30 +1,82 @@
 {
     "users": [
         {
-            "username": "manny",
-            "password": "1234",
-            "name": "Mahnum Ahmed",
-            "email": "mahnumahmed@email.com",
-            "bio": "",
+            "username": "Aleenz",
+            "password": "123",
+            "name": "Aleena Abbasi",
+            "email": "aleena@email.com",
+            "bio": "when will this end",
             "activities": [
                 {
-                    "name": "OOP HW",
-                    "category": "Personal",
+                    "name": "todo app",
+                    "category": "oop project",
                     "task_list": [
-                        { "task": "Q1", "status": "incomplete" },
-                        { "task": "Q2", "status": "complete" },
-                        { "task": "Q2", "status": "incomplete" }
+                        { "task": "classes", "status": "incomplete" },
+                        { "task": "ui screens", "status": "complete" },
+                        { "task": "check github ", "status": "complete" }
+                    ],
+                    "progress": 66
+                },
+                {
+                    "name": "hehe",
+                    "category": "oop project",
+                    "task_list": [
+                        { "task": "sfml screens", "status": "complete" },
+                        { "task": "terminal code", "status": "incomplete" },
+                        { "task": "canva character drawing", "status": "complete" },
+                        { "task": "test run", "status": "complete" }
+                    ],
+                    "progress": 75
+                },
+                {
+                    "name": "reservation app",
+                    "category": "database project",
+                    "task_list": [
+                        { "task": "pyqt ui screens", "status": "complete" },
+                        { "task": "sql queries", "status": "incomplete" },
+                        { "task": "project report", "status": "complete" },
+                        { "task": "demo screenshots", "status": "incomplete" },
+                        { "task": "demo screenrecording", "status": "incomplete" }
+                    ],
+                    "progress": 40
+                },
+                {
+                    "name": "chores",
+                    "category": "personal",
+                    "task_list": [
+                        { "task": "re-organise desk", "status": "complete" },
+                        { "task": "clean room", "status": "incomplete" },
+                        { "task": "set up shelf", "status": "incomplete" }
                     ],
                     "progress": 33
                 },
                 {
-                    "name": "DB proposal",
-                    "category": "Uni",
+                    "name": "hobbies",
+                    "category": "personal",
                     "task_list": [
-                        { "task": "prep", "status": "complete" },
-                        { "task": "draft", "status": "complete" }
+                        { "task": "painting", "status": "complete" }
                     ],
                     "progress": 100
+                }
+            ]
+        },
+        {
+            "username": "manny",
+            "password": "1234",
+            "name": "Mahnum Ahmed",
+            "email": "mahnumahmed@email.com",
+            "bio": "i be coding",
+            "activities": [
+                {
+                    "name": "testing",
+                    "category": "oop",
+                    "task_list": [
+                        { "task": "test1", "status": "complete" },
+                        { "task": "test2", "status": "complete" },
+                        { "task": "test3", "status": "incomplete" },
+                        { "task": "test4", "status": "incomplete" }
+                    ],
+                    "progress": 50
                 }
             ]
         }
