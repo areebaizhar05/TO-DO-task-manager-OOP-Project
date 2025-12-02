@@ -84,7 +84,7 @@ std::vector<std::string> JSONHandler::getJSONArray(const std::string& json, cons
 bool JSONHandler::loadFromJSON(const std::string& filename, std::map<std::string, User*>& userDatabase) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cout << "⚠️ Could not open JSON file: " << filename << " (creating new database)\n";
+        std::cout << "Could not open JSON file: " << filename << " (creating new database)\n";
         return false;
     }
     
@@ -105,7 +105,7 @@ bool JSONHandler::loadFromJSON(const std::string& filename, std::map<std::string
         }
     }
     
-    std::cout << "✅ Loaded " << userDatabase.size() << " users from JSON\n";
+    std::cout << "Loaded " << userDatabase.size() << " users from JSON\n";
     return true;
 }
 
@@ -164,7 +164,7 @@ void JSONHandler::parseActivities(User* user, const std::string& userJSON) {
 bool JSONHandler::saveToJSON(const std::string& filename, const std::map<std::string, User*>& userDatabase) {
     std::ofstream file(filename);
     if (!file.is_open()) {
-        std::cout << "❌ Could not save to JSON file: " << filename << "\n";
+        std::cout << "Could not save to JSON file: " << filename << "\n";
         return false;
     }
     
@@ -229,6 +229,6 @@ bool JSONHandler::saveToJSON(const std::string& filename, const std::map<std::st
     file << "}\n";
     
     file.close();
-    std::cout << "✅ Saved " << userDatabase.size() << " users to JSON\n";
+    std::cout << "Saved " << userDatabase.size() << " users to JSON\n";
     return true;
 }

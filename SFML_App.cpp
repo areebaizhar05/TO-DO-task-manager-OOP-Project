@@ -45,6 +45,10 @@ int main() {
     bool showDeletePopup = false;
     std::string taskToDeleteTitle = "";
 
+    //scrolling variables
+    float dashboardScroll = 0.0f;
+    float detailsScroll = 0.0f;
+
     //Json file handling checks (can remove later but i think we should keep it incase some issue happens during demo)
     std::cout << "Attempting to load data.json..." << std::endl;
     bool loadSuccess = JSONHandler::loadFromJSON("data.json", authSystem.getUserDatabase());
@@ -140,6 +144,17 @@ int main() {
                 std::cout << "Saving data..." << std::endl;
                 JSONHandler::saveToJSON("data.json", authSystem.getUserDatabase());
                 window.close();
+            }
+
+            //scrolling Logic
+            if (event.type == sf::Event::MouseWheelScrolled) {
+                if (currentState == DASHBOARD) {
+                    dashboardScroll += event.mouseWheelScroll.delta * 20.0f; //scrolling speed
+                    if (dashboardScroll > 0) dashboardScroll = 0; 
+                } else if (currentState == TASK_DETAILS) {
+                    detailsScroll += event.mouseWheelScroll.delta * 20.0f;
+                    if (detailsScroll > 0) detailsScroll = 0;
+                }
             }
 
             //if popup is open then we block input handling
@@ -266,6 +281,7 @@ int main() {
                         std::string cat = deadlineInput.input.empty() ? "General" : deadlineInput.input;
                         currentUser->createTask(activityNameInput.input, cat);
                         activityNameInput.clear();
+                        deadlineInput.clear();
                     }
 
                     //filter drop down logic
@@ -289,7 +305,7 @@ int main() {
                     }
 
                     //Task list stuff
-                    float activityY = 180;
+                    float activityY = 180 + dashboardScroll; //added scrolling
                     auto tasks = currentUser->getTasks();
                     for (auto task : tasks) {
                         //filter logic
@@ -308,6 +324,7 @@ int main() {
                             currentSelectedTask = task;
                             selectedSubTaskIndex = -1; 
                             currentState = TASK_DETAILS;
+                            detailsScroll = 0; // Reset details scroll
                         }
 
                         if (delBtn.getGlobalBounds().contains(mousePos)) {
@@ -345,7 +362,7 @@ int main() {
                     }
 
                     //CHECKBOX FOR SUB-TASK COMPLETION
-                    float taskY = 150;
+                    float taskY = 150 + detailsScroll; // Apply Scroll
                     bool clickedRow = false;
                     for (int i = 1; i <= currentSelectedTask->getSubTaskCount(); i++) {
                         sf::FloatRect rowBounds(40, taskY, 900, 50);
@@ -396,18 +413,21 @@ int main() {
             logoutBtn.update(mousePos); logoutBtn.draw(window);
         }
         else if (currentState == DASHBOARD && currentUser) {
-            sf::Text title("My Dashboard", font, 24); title.setFillColor(sf::Color::Black); title.setPosition(50, 30); window.draw(title);
-            activityNameInput.draw(window); deadlineInput.draw(window);
-            addActivityBtn.update(mousePos); addActivityBtn.draw(window);
-            clearActivityBtn.update(mousePos); clearActivityBtn.draw(window); 
-            backToWelcomeFromDash.update(mousePos); backToWelcomeFromDash.draw(window);
-            filterBtn.update(mousePos); filterBtn.draw(window);
-
-            float activityY = 180;
+            
+            //draw tasks FIRST (so they scroll under header)
+            float activityY = 180 + dashboardScroll;
             auto tasks = currentUser->getTasks();
+            
+            //calculate total progress for character
+            float totalProgSum = 0;
+            int totalTasks = 0;
+
             for (auto task : tasks) {
                 //apply filter
                 if (currentFilter != "All" && task->getCategory() != currentFilter) continue;
+                
+                totalTasks++;
+                totalProgSum += task->getProgressPercent();
 
                 //blue box for activity/main task
                 sf::RectangleShape activityBox(sf::Vector2f(580, 80)); 
@@ -426,6 +446,12 @@ int main() {
                 progBar.setFillColor(sf::Color(255, 192, 203)); 
                 window.draw(progBar);
                 
+                //progress % text beside bar
+                sf::Text taskProgText(std::to_string((int)prog) + "%", font, 14);
+                taskProgText.setFillColor(sf::Color::Black);
+                taskProgText.setPosition(980, activityY + 55);
+                window.draw(taskProgText);
+
                 //open task/activity button on far right of blue box
                 sf::RectangleShape openBtn(sf::Vector2f(60, 30)); 
                 openBtn.setPosition(1120, activityY + 50); 
@@ -450,7 +476,36 @@ int main() {
                 activityY += 100;
             }
 
-            //filter dropdown
+            //header thing to hide scrolling items at top
+            sf::RectangleShape headerBg(sf::Vector2f(1200, 160));
+            headerBg.setFillColor(sf::Color::White);
+            window.draw(headerBg);
+
+            sf::Text title("My Dashboard", font, 24); title.setFillColor(sf::Color::Black); title.setPosition(50, 30); window.draw(title);
+            activityNameInput.draw(window); deadlineInput.draw(window);
+            addActivityBtn.update(mousePos); addActivityBtn.draw(window);
+            clearActivityBtn.update(mousePos); clearActivityBtn.draw(window); 
+            backToWelcomeFromDash.update(mousePos); backToWelcomeFromDash.draw(window);
+            filterBtn.update(mousePos); filterBtn.draw(window);
+
+            //dashboard Character Logic
+            float mainAvg = (totalTasks > 0) ? (totalProgSum / totalTasks) : 0;
+            int mainEmo = getEmotionIndex(mainAvg);
+            if (mainEmo >= 0 && mainEmo < 5) {
+                sf::Sprite charSprite(emotionTextures[mainEmo]);
+                charSprite.setPosition(220, 350); 
+                charSprite.setScale(0.6f, 0.6f);
+                window.draw(charSprite);
+            }
+            //total progress bar under character
+            sf::RectangleShape totalBg(sf::Vector2f(200, 15));
+            totalBg.setPosition(270, 660); totalBg.setFillColor(sf::Color(220, 220, 220)); window.draw(totalBg);
+            sf::RectangleShape totalFill(sf::Vector2f((mainAvg / 100.0f) * 200, 15));
+            totalFill.setPosition(270, 660); totalFill.setFillColor(sf::Color(255, 192, 203)); window.draw(totalFill);
+            sf::Text totalText("Total Progress: " + std::to_string((int)mainAvg) + "%", font, 14);
+            totalText.setFillColor(sf::Color::Black); totalText.setPosition(300, 680); window.draw(totalText);
+
+            //filter dropdown (Draw last)
             if (showFilterDropdown) {
                 std::vector<std::string> cats = currentUser->getAllCategories();
                 cats.insert(cats.begin(), "All");
@@ -497,12 +552,9 @@ int main() {
             backToWelcomeFromProfile.update(mousePos); backToWelcomeFromProfile.draw(window);
         }
         else if (currentState == TASK_DETAILS && currentSelectedTask) {
-             sf::RectangleShape topBar(sf::Vector2f(1200, 80)); topBar.setFillColor(sf::Color(240, 240, 250)); window.draw(topBar);
-             sf::Text title(currentSelectedTask->getTitle(), font, 32); title.setFillColor(sf::Color::Black); title.setPosition(40, 15); window.draw(title);
-             sf::Text info(currentSelectedTask->getCategory(), font, 14); info.setFillColor(sf::Color(150, 150, 150)); info.setPosition(40, 50); window.draw(info);
-             closeDetailsBtn.update(mousePos); closeDetailsBtn.draw(window);
              
-             float taskY = 150;
+             //tasks list drawn first for scrolling
+             float taskY = 150 + detailsScroll;
              for (int i = 1; i <= currentSelectedTask->getSubTaskCount(); i++) {
                  if ((i - 1) == selectedSubTaskIndex) {
                      sf::RectangleShape highlight(sf::Vector2f(900, 50)); highlight.setPosition(40, taskY); highlight.setFillColor(sf::Color(255, 240, 245)); window.draw(highlight);
@@ -513,12 +565,23 @@ int main() {
                  sf::Text tName(st->getName(), font, 18); tName.setFillColor(sf::Color::Black); tName.setPosition(80, taskY + 2); window.draw(tName);
                  taskY += 60;
              }
+
+             //scrolling bar
+             sf::RectangleShape topBar(sf::Vector2f(1200, 80)); topBar.setFillColor(sf::Color(240, 240, 250)); window.draw(topBar);
+             sf::Text title(currentSelectedTask->getTitle(), font, 32); title.setFillColor(sf::Color::Black); title.setPosition(40, 15); window.draw(title);
+             sf::Text info(currentSelectedTask->getCategory(), font, 14); info.setFillColor(sf::Color(150, 150, 150)); info.setPosition(40, 50); window.draw(info);
+             closeDetailsBtn.update(mousePos); closeDetailsBtn.draw(window);
+
+             //bottom part stays still
+             sf::RectangleShape bottomCover(sf::Vector2f(1200, 300)); bottomCover.setPosition(0, 450); bottomCover.setFillColor(sf::Color::White); window.draw(bottomCover);
+
              float progress = currentSelectedTask->getProgressPercent();
              int emoIndex = getEmotionIndex(progress);
              if (emoIndex >= 0 && emoIndex < 5) {
                  sf::Sprite emotionSprite(emotionTextures[emoIndex]); emotionSprite.setPosition(800, 140); emotionSprite.setScale(0.7f, 0.7f); window.draw(emotionSprite);
              }
-             sf::Text addTaskLabel("Add a subtask", font, 14); addTaskLabel.setFillColor(sf::Color(150, 150, 150)); addTaskLabel.setPosition(40, 465); window.draw(addTaskLabel);
+             
+             sf::Text addTaskLabel("Add a subtask", font, 14); addTaskLabel.setFillColor(sf::Color(150, 150, 150)); addTaskLabel.setPosition(150, 475); window.draw(addTaskLabel);
              subTaskInput.draw(window);
              addSubTaskBtn.update(mousePos); addSubTaskBtn.draw(window);
              deleteSubTaskBtn.update(mousePos); deleteSubTaskBtn.draw(window);
