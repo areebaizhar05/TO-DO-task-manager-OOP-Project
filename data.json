@@ -71,12 +71,12 @@
                     "name": "testing",
                     "category": "oop",
                     "task_list": [
-                        { "task": "test1", "status": "incomplete" },
-                        { "task": "test2", "status": "incomplete" },
+                        { "task": "test1", "status": "complete" },
+                        { "task": "test2", "status": "complete" },
                         { "task": "test3", "status": "incomplete" },
                         { "task": "test4", "status": "incomplete" }
                     ],
-                    "progress": 0
+                    "progress": 50
                 },
                 {
                     "name": "project",

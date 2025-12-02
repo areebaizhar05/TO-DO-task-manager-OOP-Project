@@ -76,6 +76,17 @@ int main() {
         }
     }
 
+    //loading the app logo i made on canva
+    sf::Texture logoImage;
+    sf::Sprite logo;
+    if (logoImage.loadFromFile("logo.png")) {
+        logo.setTexture(logoImage);
+        logo.setPosition(490, 8); // Top Left Padding
+        logo.setScale(0.18f, 0.18f); // Scale down (Change this number to resize logo)
+    } else {
+        std::cerr << "Warning: logo.png not found!" << std::endl;
+    }
+
     AppState currentState = SIGNUP; 
 
     //==================== UI STUFF STARTS FROM THIS POINT ===========================================
@@ -399,15 +410,17 @@ int main() {
             window.draw(statusMsg);
         }
         else if (currentState == LOGIN) {
-            sf::Text title("Welcome Back", font, 40); title.setFillColor(sf::Color::Black); title.setPosition(450, 100); window.draw(title);
+            window.draw(logo);
+            sf::Text title("Welcome Back", font, 40); title.setFillColor(sf::Color::Black); title.setPosition(450, 170); window.draw(title);
             loginUser.draw(window); loginPass.draw(window);
             btnLoginConfirm.update(mousePos); btnLoginConfirm.draw(window);
             btnGoToSignUp.update(mousePos); btnGoToSignUp.draw(window);
             window.draw(statusMsg);
         }
         else if (currentState == WELCOME && currentUser) {
-            sf::Text title("Task-Tracker", font, 50); title.setFillColor(sf::Color::Black); title.setPosition(480, 80); window.draw(title);
-            sf::Text subtitle("Welcome, " + currentUser->getName(), font, 24); subtitle.setFillColor(sf::Color(150, 150, 150)); subtitle.setPosition(490, 150); window.draw(subtitle);
+            window.draw(logo);
+            sf::Text title("TASK-TRACKER", font, 50); title.setFillColor(sf::Color::Black); title.setPosition(400, 180); window.draw(title);
+            sf::Text subtitle("Welcome, " + currentUser->getName(), font, 24); subtitle.setFillColor(sf::Color(150, 150, 150)); subtitle.setPosition(450, 240); window.draw(subtitle);
             welcomeProfileBtn.update(mousePos); welcomeProfileBtn.draw(window);
             welcomeDashboardBtn.update(mousePos); welcomeDashboardBtn.draw(window);
             logoutBtn.update(mousePos); logoutBtn.draw(window);
