@@ -1,6 +1,16 @@
 {
     "users": [
         {
+            "username": "aleenz",
+            "password": "123",
+            "name": "aleena abbasi",
+            "email": " aleena@email.com",
+            "bio": "",
+            "activities": [
+
+            ]
+        },
+        {
             "username": "manny",
             "password": "1234",
             "name": "Mahnum",

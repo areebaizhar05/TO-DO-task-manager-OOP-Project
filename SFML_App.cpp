@@ -11,8 +11,8 @@
 #include "Task.hpp"           
 #include "SimpleSubTask.hpp"
 #include "UI_Components.hpp" 
-#include "DateHelper.hpp" // ADDED FOR DATE THING: Need DateHelper for Date class
-#include "SubTask.hpp"    // ADDED FOR DATE THING: Need Priority enum
+#include "DateHelper.hpp" //ADDED FOR DATE THING: need DateHelper for Date class
+#include "SubTask.hpp"    //ADDED FOR DATE THING: need Priority enum
  
 //converting string to lowercase for authentication in login
 std::string toLower(std::string str) {
@@ -35,10 +35,10 @@ enum AppState { SIGNUP, LOGIN, WELCOME, DASHBOARD, PROFILE, TASK_DETAILS };
 // ADDED FOR DATE THING: Priority color helper
 sf::Color getPriorityColor(Priority p) {
     switch (p) {
-        case Priority::HIGH:   return sf::Color(255, 100, 100); // Red (Overdue/Urgent)
-        case Priority::MEDIUM: return sf::Color(255, 200, 100); // Orange/Yellow
-        case Priority::LOW:    return sf::Color(150, 200, 255); // Light Blue/Calm
-        default:               return sf::Color(200, 200, 200); // Grey
+        case Priority::HIGH:   return sf::Color(255, 100, 100); //red (Overdue/Urgent)
+        case Priority::MEDIUM: return sf::Color(255, 200, 100); //yellow
+        case Priority::LOW:    return sf::Color(150, 200, 255); //light blue
+        default:               return sf::Color(200, 200, 200); //grey
     }
 }
 
@@ -93,8 +93,8 @@ int main() {
     sf::Sprite logo;
     if (logoImage.loadFromFile("logo.png")) {
         logo.setTexture(logoImage);
-        logo.setPosition(490, 8); // Top Left Padding
-        logo.setScale(0.18f, 0.18f); // Scale down (Change this number to resize logo)
+        logo.setPosition(490, 8); //top Left Padding
+        logo.setScale(0.18f, 0.18f); //scale down (Change this number to resize logo)
     } else {
         std::cerr << "Warning: logo.png not found!" << std::endl;
     }
@@ -128,7 +128,7 @@ int main() {
     InputBox activityNameInput(50, 160, 350, 40, "New Activity Name", font);
     InputBox deadlineInput(50, 220, 350, 40, "Category (e.g. Project)", font); // Acts as Category input
     
-    // ADDED FOR DATE THING: New date inputs for the main Task
+    //ADDED FOR DATE THING: New date inputs for the main Task
     InputBox taskDayInput(50, 340, 70, 40, "DD", font);
     InputBox taskMonthInput(130, 340, 70, 40, "MM", font);
     InputBox taskYearInput(210, 340, 100, 40, "YYYY", font);
@@ -138,7 +138,7 @@ int main() {
     Button backToWelcomeFromDash(50, 620, 100, 40, "Back", font);
     Button filterBtn(1000, 80, 150, 40, "Filter: All", font); // NEW FILTER BUTTON
     
-    // ADDED FOR DATE THING: Label for date inputs
+    //ADDED FOR DATE THING: Label for date inputs
     sf::Text dueDateLabel("Due Date (Optional):", font, 14); 
     dueDateLabel.setFillColor(sf::Color(150, 150, 150)); 
     dueDateLabel.setPosition(50, 320); 
@@ -222,7 +222,7 @@ int main() {
             {
                 activityNameInput.handleClick(mousePos); activityNameInput.handleKeyPress(event);
                 deadlineInput.handleClick(mousePos); deadlineInput.handleKeyPress(event);
-                // ADDED FOR DATE THING: Handle date inputs
+                //ADDED FOR DATE THING: Handle date inputs
                 taskDayInput.handleClick(mousePos); taskDayInput.handleKeyPress(event);
                 taskMonthInput.handleClick(mousePos); taskMonthInput.handleKeyPress(event);
                 taskYearInput.handleClick(mousePos); taskYearInput.handleKeyPress(event);
@@ -310,7 +310,7 @@ int main() {
                 else if (currentState == DASHBOARD) {
                     if (backToWelcomeFromDash.isClicked(mousePos)) currentState = WELCOME;
                     
-                    // ADDED FOR DATE THING: Handle date inputs
+                    //ADDED FOR DATE THING: Handle date inputs
                     taskDayInput.handleClick(mousePos); taskDayInput.handleKeyPress(event);
                     taskMonthInput.handleClick(mousePos); taskMonthInput.handleKeyPress(event);
                     taskYearInput.handleClick(mousePos); taskYearInput.handleKeyPress(event);
@@ -318,7 +318,7 @@ int main() {
                     if (clearActivityBtn.isClicked(mousePos)) {
                         activityNameInput.clear();
                         deadlineInput.clear();
-                        // ADDED FOR DATE THING: Clear date inputs
+                        //ADDED FOR DATE THING: Clear date inputs
                         taskDayInput.clear();
                         taskMonthInput.clear();
                         taskYearInput.clear();
@@ -327,28 +327,28 @@ int main() {
                     if (addActivityBtn.isClicked(mousePos) && !activityNameInput.input.empty()) {
                         std::string cat = deadlineInput.input.empty() ? "General" : deadlineInput.input;
                         
-                        // ADDED FOR DATE THING: Parse date inputs
+                        //ADDED FOR DATE THING: Parse date inputs
                         Date taskDueDate;
                         int d = 0, m = 0, y = 0; // Initialize to zero (not set)
 
 try {
-    // Attempt to parse each field separately
+    //debugging:attempt to parse each field separately
     if (!taskDayInput.input.empty()) d = std::stoi(taskDayInput.input);
     if (!taskMonthInput.input.empty()) m = std::stoi(taskMonthInput.input);
     if (!taskYearInput.input.empty()) y = std::stoi(taskYearInput.input);
     
-    // Create Date ONLY if all fields resulted in non-zero values
+    //create Date ONLY if all fields resulted in non-zero values
     if (d > 0 && m > 0 && y > 0) {
         taskDueDate = Date(d, m, y); 
     }
 } catch (const std::exception& e) {}
                         
-                        // UPDATED: Pass taskDueDate to createTask
+                        //UPDATED: Pass taskDueDate to createTask
                         currentUser->createTask(activityNameInput.input, cat, taskDueDate); 
                         
                         activityNameInput.clear();
                         deadlineInput.clear();
-                        // ADDED FOR DATE THING: Clear date inputs
+                        //ADDED FOR DATE THING: Clear date inputs
                         taskDayInput.clear();
                         taskMonthInput.clear();
                         taskYearInput.clear();
@@ -394,7 +394,7 @@ try {
                             currentSelectedTask = task;
                             selectedSubTaskIndex = -1; 
                             currentState = TASK_DETAILS;
-                            detailsScroll = 0; // Reset details scroll
+                            detailsScroll = 0; //reset details scroll
                         }
 
                         if (delBtn.getGlobalBounds().contains(mousePos)) {
@@ -419,7 +419,7 @@ try {
                     if (closeDetailsBtn.isClicked(mousePos)) currentState = DASHBOARD;
                     
                     if (addSubTaskBtn.isClicked(mousePos) && !subTaskInput.input.empty()) {
-                        // UPDATED: SimpleSubTask no longer takes a Date argument
+                        //UPDATED: SimpleSubTask no longer takes a Date argument
                         SubTask* newSt = new SimpleSubTask(subTaskInput.input); 
                         currentSelectedTask->addSubTask(newSt);
                         subTaskInput.clear();
@@ -433,7 +433,7 @@ try {
                     }
 
                     //CHECKBOX FOR SUB-TASK COMPLETION
-                    float taskY = 150 + detailsScroll; // Apply Scroll
+                    float taskY = 150 + detailsScroll; //apply Scroll
                     bool clickedRow = false;
                     for (int i = 1; i <= currentSelectedTask->getSubTaskCount(); i++) {
                         sf::FloatRect rowBounds(40, taskY, 900, 50);
@@ -508,7 +508,7 @@ try {
                 activityBox.setFillColor(sf::Color(200, 220, 255)); 
                 window.draw(activityBox);
                 
-                // ADDED FOR DATE THING: Color-coded Priority Border on the right
+                //ADDED FOR DATE THING: Color-coded Priority Border on the right
                 sf::RectangleShape priorityBar(sf::Vector2f(5, 80)); // 5px wide bar
                 priorityBar.setPosition(activityBox.getPosition().x + activityBox.getSize().x - 5, activityBox.getPosition().y); 
                 priorityBar.setFillColor(getPriorityColor(task->getPriority())); 
@@ -518,7 +518,7 @@ try {
                 sf::Text taskName(task->getTitle(), font, 18); taskName.setFillColor(sf::Color::Black); taskName.setPosition(620, activityY + 10); window.draw(taskName);
                 sf::Text catName(task->getCategory(), font, 14); catName.setFillColor(sf::Color::Black); catName.setPosition(620, activityY + 35); window.draw(catName);
                 
-                // ADDED FOR DATE THING: Display Due Date Info
+                //ADDED FOR DATE THING: Display Due Date Info
                 std::string dueDateText;
                 if (task->getDueDate().isSet()) {
                     int daysUntil = task->daysUntilDue();
@@ -534,8 +534,8 @@ try {
                 }
                 
                 sf::Text dateText(dueDateText, font, 14); 
-                dateText.setFillColor(getPriorityColor(task->getPriority())); // Color text as well
-                dateText.setPosition(800, activityY + 10); // Adjust position as needed
+                dateText.setFillColor(getPriorityColor(task->getPriority())); //to color text as well
+                dateText.setPosition(800, activityY + 10); //adjust position as needed
                 window.draw(dateText);
 
                 //progress bar of task
@@ -584,7 +584,7 @@ try {
             activityNameInput.draw(window); 
             deadlineInput.draw(window);
             
-            // ADDED FOR DATE THING: Draw date inputs and label
+            //ADDED FOR DATE THING: Draw date inputs and label
             window.draw(dueDateLabel);
             taskDayInput.draw(window);
             taskMonthInput.draw(window);
@@ -600,7 +600,7 @@ try {
             int mainEmo = getEmotionIndex(mainAvg);
             if (mainEmo >= 0 && mainEmo < 5) {
                 sf::Sprite charSprite(emotionTextures[mainEmo]);
-                charSprite.setPosition(250, 350); 
+                charSprite.setPosition(310, 350); 
                 charSprite.setScale(0.6f, 0.6f);
                 window.draw(charSprite);
             }
@@ -670,7 +670,7 @@ try {
                 Checkbox cb(40, taskY, st->isCompleted());
                 cb.draw(window);
                 
-                // Subtask name (only display name and check mark, no individual dates/priority)
+                //Subtask name (only display name and check mark, no individual dates/priority)
                 sf::Text tName(st->getName(), font, 18); 
                 tName.setFillColor(sf::Color::Black); 
                 tName.setPosition(80, taskY + 2); 
@@ -683,7 +683,7 @@ try {
             sf::RectangleShape topBar(sf::Vector2f(1200, 80)); topBar.setFillColor(sf::Color(240, 240, 250)); window.draw(topBar);
             sf::Text title(currentSelectedTask->getTitle(), font, 32); title.setFillColor(sf::Color::Black); title.setPosition(40, 15); window.draw(title);
             
-            // UPDATED: Show Task-level priority/date info in the header
+            //UPDATED: Show Task-level priority/date info in the header
             std::string taskInfo = currentSelectedTask->getCategory();
             if (currentSelectedTask->getDueDate().isSet()) {
                 taskInfo += " | Due: " + currentSelectedTask->getDueDate().toString() + " (" + currentSelectedTask->getPriorityString() + ")";
@@ -708,7 +708,7 @@ try {
             sf::Text addTaskLabel("Add a subtask ->", font, 14); addTaskLabel.setFillColor(sf::Color(150, 150, 150)); addTaskLabel.setPosition(31, 510); window.draw(addTaskLabel);
             subTaskInput.draw(window);
             
-            // ADJUSTED ADD BUTTON POSITION
+            //ADJUSTED ADD BUTTON POSITION
             addSubTaskBtn.rect.setPosition(770, 500);
             auto bounds = addSubTaskBtn.text.getLocalBounds();
             addSubTaskBtn.text.setPosition(addSubTaskBtn.rect.getPosition().x + (addSubTaskBtn.rect.getSize().x - bounds.width) / 2, addSubTaskBtn.rect.getPosition().y + (addSubTaskBtn.rect.getSize().y - bounds.height) / 2 - 5);
