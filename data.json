@@ -8,21 +8,20 @@
             "bio": "",
             "activities": [
                 {
-                    "name": "OOP HW",
-                    "category": "Personal",
+                    "name": "OOP",
+                    "category": "Uni",
                     "task_list": [
                         { "task": "Q1", "status": "incomplete" },
                         { "task": "Q2", "status": "complete" },
-                        { "task": "Q2", "status": "incomplete" }
+                        { "task": "Q3", "status": "incomplete" }
                     ],
                     "progress": 33
                 },
                 {
-                    "name": "DB proposal",
-                    "category": "Uni",
+                    "name": "Groceries",
+                    "category": "Personal",
                     "task_list": [
-                        { "task": "prep", "status": "complete" },
-                        { "task": "draft", "status": "complete" }
+
                     ],
                     "progress": 100
                 }

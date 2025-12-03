@@ -39,13 +39,13 @@ void authMenu() {
             case 1:
                 if (authSystem.loginUser()) {
                     currentUser = authSystem.getCurrentUser();
-                    cout << "✅ Login successful! Welcome, " << currentUser->getUsername() << "!" << endl;
+                    cout << "Login successful! Welcome, " << currentUser->getUsername() << "!" << endl;
                     return;
                 }
                 break;
             case 2:
                 if (authSystem.registerUser()) {
-                    cout << "✅ Registration successful! Please login." << endl;
+                    cout << "Registration successful! Please login." << endl;
                 }
                 break;
             case 3:
@@ -112,9 +112,9 @@ void markSubTaskComplete(Task* task) {
     if (subTask) {
         subTask->markCompleted();
         task->updateProgressCount();
-        cout << "✅ Subtask marked as complete!" << endl;
+        cout << "Subtask marked as complete!" << endl;
     } else {
-        cout << "❌ Invalid selection!" << endl;
+        cout << "Invalid selection!" << endl;
     }
 }
 
@@ -235,7 +235,7 @@ void mainMenu() {
     int choice;
     do {
         clearScreen();
-        cout << "👤 Welcome, " << currentUser->getUsername() << "!" << endl;
+        cout << "Welcome, " << currentUser->getUsername() << "!" << endl;
         
         cout << "\n========== MAIN MENU ==========\n";
         cout << "1. View Dashboard\n";

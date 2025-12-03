@@ -15,8 +15,8 @@ User::~User() {
 
 void User::createTask(string title, string category) {
     Task* newTask = new Task(title, category);
-    tasks.push_back(newTask);
-    cout << "✅ Task '" << title << "' created successfully!" << endl;
+    tasks.push_back(newTask);//push new task in verctor
+    cout << "Task '" << title << "' created successfully!" << endl;
 }
 
 void User::deleteTask(string title) {
@@ -24,24 +24,24 @@ void User::deleteTask(string title) {
         if (tasks[i]->getTitle() == title) {
             delete tasks[i];
             tasks.erase(tasks.begin() + i);
-            cout << "✅ Task deleted successfully!" << endl;
+            cout << "Task deleted successfully!" << endl;
             return;
         }
     }
-    cout << "❌ Task not found!" << endl;
+    cout << "Task not found!" << endl;
 }
 
 void User::displayDashboard() const {
-    cout << "\n╔════════════════════════════════════╗" << endl;
-    cout << "║          USER DASHBOARD            ║" << endl;
-    cout << "╚════════════════════════════════════╝" << endl;
+    cout << "\n+------------------------------------+" << endl;
+    cout << "|          USER DASHBOARD            |" << endl;
+    cout << "+------------------------------------+" << endl;
     cout << "Username: " << username << endl;
     cout << "Overall Progress: " << (int)getOverallProgress() << "%" << endl;
     cout << "Completed Tasks: " << getCompletedTasksCount() << "/" << tasks.size() << endl;
     cout << "------------------------------------" << endl;
 
     if (tasks.empty()) {
-        cout << "No tasks yet. Create one to get started!" << endl;
+        cout << "No tasks yet. Create one to get started:)" << endl;
     } else {
         cout << "\nYour Tasks:\n" << endl;
         for (size_t i = 0; i < tasks.size(); i++) {
@@ -54,6 +54,7 @@ void User::displayDashboard() const {
     }
 }
 
+
 void User::displayProfile() const {
     cout << "\n========== USER PROFILE ==========\n";
     cout << "Username: " << username << endl;
@@ -64,14 +65,14 @@ void User::displayProfile() const {
     cout << "==================================\n";
 }
 
-void User::updateProfile(string newName, string newEmail, string newBio) {
+void User::updateProfile(string newName, string newEmail, string newBio) {//not tested yet in current main
     name = newName;
     email = newEmail;
     bio = newBio;
-    cout << "✅ Profile updated successfully!" << endl;
+    cout << "Profile updated successfully!" << endl;
 }
 
-float User::getOverallProgress() const {
+float User::getOverallProgress() const {//avg btw the progress of all tasks
     if (tasks.empty()) return 0.0f;
 
     float totalProgress = 0.0f;

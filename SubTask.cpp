@@ -10,7 +10,7 @@ SubTask::SubTask(string name, Date dueDate)
 
 void SubTask::markCompleted() {
     completed = true;
-    cout << "✅ Task marked as completed!" << endl;
+    cout << "Task marked as completed!" << endl;
 }
 
 bool SubTask::isCompleted() const {
@@ -34,7 +34,7 @@ string SubTask::getPriorityString() const {
     }
 }
 
-void SubTask::calculatePriority() {
+void SubTask::calculatePriority() {//incorporate this when Date helper stuff starts working
     if (!dueDate.isSet()) {
         priority = Priority::MEDIUM;
         return;

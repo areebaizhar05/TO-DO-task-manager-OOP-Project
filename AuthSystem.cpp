@@ -2,11 +2,11 @@
 #include <iostream>
 using namespace std;
 
-AuthSystem::AuthSystem() : currentUser(nullptr) {}
+AuthSystem::AuthSystem() : currentUser(nullptr) {}//logged out by default
 
 AuthSystem::~AuthSystem() {
     for (auto& pair : userDatabase) {
-        delete pair.second;
+        delete pair.second;//frees heap allocated to users
     }
     userDatabase.clear();
 }
@@ -18,7 +18,7 @@ bool AuthSystem::registerUser() {
     cout << "Enter username: ";
     getline(cin, username);
 
-    if (userDatabase.find(username) != userDatabase.end()) {
+    if (userDatabase.find(username) != userDatabase.end()) {//username needs to be unique
         cout << "❌ Username already exists!\n";
         return false;
     }
@@ -36,7 +36,7 @@ bool AuthSystem::registerUser() {
     newUser->setPassword(password);
     userDatabase[username] = newUser;
 
-    cout << "✅ Registration successful!\n";
+    cout << "Registration successful!\n";
     return true;
 }
 
@@ -50,13 +50,13 @@ bool AuthSystem::loginUser() {
     cout << "Enter password: ";
     getline(cin, password);
 
-    auto it = userDatabase.find(username);
+    auto it = userDatabase.find(username);//using auto to directly give it the type of the map 
     if (it != userDatabase.end() && it->second->getPassword() == password) {
         currentUser = it->second;
         return true;
     }
 
-    cout << "❌ Invalid credentials!\n";
+    cout << "ERROR:Incorrect username or password!\n";
     return false;
 }
 
