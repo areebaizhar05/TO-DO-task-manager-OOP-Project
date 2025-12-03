@@ -61,6 +61,16 @@
             ]
         },
         {
+            "username": "jon",
+            "password": "123",
+            "name": "john doe",
+            "email": "john@email.com",
+            "bio": "",
+            "activities": [
+
+            ]
+        },
+        {
             "username": "manny",
             "password": "1234",
             "name": "Mahnum Ahmed",

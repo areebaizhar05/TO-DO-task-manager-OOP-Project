@@ -594,7 +594,7 @@ int main() {
                  sf::Sprite emotionSprite(emotionTextures[emoIndex]); emotionSprite.setPosition(800, 140); emotionSprite.setScale(0.7f, 0.7f); window.draw(emotionSprite);
              }
              
-             sf::Text addTaskLabel("Add a subtask", font, 14); addTaskLabel.setFillColor(sf::Color(150, 150, 150)); addTaskLabel.setPosition(150, 475); window.draw(addTaskLabel);
+             sf::Text addTaskLabel("Add a subtask ->", font, 14); addTaskLabel.setFillColor(sf::Color(150, 150, 150)); addTaskLabel.setPosition(31, 510); window.draw(addTaskLabel);
              subTaskInput.draw(window);
              addSubTaskBtn.update(mousePos); addSubTaskBtn.draw(window);
              deleteSubTaskBtn.update(mousePos); deleteSubTaskBtn.draw(window);
