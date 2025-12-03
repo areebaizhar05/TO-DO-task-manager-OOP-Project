@@ -3,27 +3,37 @@
         {
             "username": "manny",
             "password": "1234",
-            "name": "Mahnum Ahmed",
-            "email": "mahnumahmed@email.com",
+            "name": "Mahnum",
+            "email": "mahnum@email.com",
             "bio": "",
             "activities": [
-                {
-                    "name": "OOP",
-                    "category": "Uni",
-                    "task_list": [
-                        { "task": "Q1", "status": "incomplete" },
-                        { "task": "Q2", "status": "complete" },
-                        { "task": "Q3", "status": "incomplete" }
-                    ],
-                    "progress": 33
-                },
-                {
-                    "name": "Groceries",
-                    "category": "Personal",
-                    "task_list": [
+ {
+ "name": "OOP hw",
+ "category": "Uni",
+ "due_date": "",
+ "task_list": [
 
                     ],
                     "progress": 100
+                },
+ {
+ "name": "Stuff",
+ "category": "Personal",
+ "due_date": "",
+ "task_list": [
+                        { "task": "apples", "status": "complete" },
+                        { "task": "banana", "status": "incomplete" }
+                    ],
+                    "progress": 50
+                },
+ {
+ "name": "abd",
+ "category": "Uni",
+ "due_date": "04/12/2025",
+ "task_list": [
+                        { "task": "q1", "status": "incomplete" }
+                    ],
+                    "progress": 0
                 }
             ]
         }

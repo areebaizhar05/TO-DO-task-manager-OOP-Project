@@ -2,7 +2,7 @@
 #define JSONHANDLER_H
 
 #include "User.hpp"
-#include "Task.cpp"  // Keep this as Task.cpp since that's where your class is
+#include "Task.hpp"  // Keep this as Task.cpp since that's where your class is
 #include "SubTask.hpp"
 #include <string>
 #include <vector>

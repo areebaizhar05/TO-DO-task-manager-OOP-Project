@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "Task.cpp"
+#include "Task.hpp"
 using namespace std;
 
 class User {
@@ -19,7 +19,7 @@ public:
     User(string username, string name = "", string email = "");
     ~User();
 
-    void createTask(string title, string category);
+    void createTask(string title, string category, Date dueDate = Date());
     void deleteTask(string title);
     void displayDashboard() const;
     void displayProfile() const;

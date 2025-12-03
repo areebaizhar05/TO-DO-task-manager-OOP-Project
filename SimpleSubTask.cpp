@@ -3,8 +3,8 @@
 
 using namespace std;
 
-SimpleSubTask::SimpleSubTask(string name, Date dueDate) 
-    : SubTask(name, dueDate) {}
+SimpleSubTask::SimpleSubTask(string name) 
+    : SubTask(name) {}
 
 string SimpleSubTask::getType() const {
     return "One-time Task";
@@ -14,13 +14,13 @@ void SimpleSubTask::display() const {
     string status = completed ? "✓ Completed!" : "✗ Pending";
     cout << status << " " << name << " [" << getPriorityString() << "]";
     
-    if (dueDate.isSet()) {
-        cout << " (Due: " << dueDate.toString();
-        if (dueDate.isOverdue() && !completed) {
-            cout << " - OVERDUE!";
-        }
-        cout << ")";
-    }
+    // if (dueDate.isSet()) {
+    //     cout << " (Due: " << dueDate.toString();
+    //     if (dueDate.isOverdue() && !completed) {
+    //         cout << " - OVERDUE!";
+    //     }
+    //     cout << ")";
+    // }
 }
 
 bool SimpleSubTask::isRecurring() const {

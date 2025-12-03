@@ -40,6 +40,8 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp",
-        "iomanip": "cpp"
-    }
+        "iomanip": "cpp",
+        "iterator": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

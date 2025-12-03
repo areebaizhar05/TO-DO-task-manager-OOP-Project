@@ -22,14 +22,13 @@ struct Activity {
         return (completedCount * 100) / tasks.size();
     }
     
-    char getEmotion() const {
+    int getEmotion() const {
         int progress = getProgress();
-        if (progress == 100) return '5'; // Ecstatic
-        if (progress >= 80) return '4'; // Smiling
-        if (progress >= 60) return '3'; // Excited
-        if (progress >= 40) return '2'; // Neutral
-        if (progress >= 20) return '1'; // Worried
-        return '0'; // Sad
+        if (progress >= 80) return 4; // Excited
+        if (progress >= 60) return 3; // Happy
+        if (progress >= 40) return 2; // Neutral
+        if (progress >= 20) return 1; // Worried
+        return 0; // Sad
     }
 };
 
@@ -180,21 +179,28 @@ public:
     }
 };
 
-std::string getEmotionEmoji(char emotion) {
-    if (emotion == '0') return ":(";  // Sad
-    if (emotion == '1') return ":/";  // Worried
-    if (emotion == '2') return ":]";  // Neutral
-    if (emotion == '3') return ":O";  // Excited
-    if (emotion == '4') return ":)";  // Smiling
-    return ":D"; // Ecstatic
-}
-
 int main() {
     sf::RenderWindow window(sf::VideoMode(1000, 750), "Task-Tracker - Activity Details");
     window.setFramerateLimit(60);
 
     sf::Font font;
     font.loadFromFile("arial.ttf");
+
+    // Load emotion textures
+    std::vector<sf::Texture> emotionTextures(5);
+    std::vector<std::string> emotionFiles = {
+        "1.png",  // Sad
+        "2.png",  // Worried
+        "3.png",  // Neutral
+        "4.png",  // Happy
+        "5.png"   // Excited
+    };
+    
+    for (size_t i = 0; i < emotionFiles.size(); ++i) {
+        if (!emotionTextures[i].loadFromFile(emotionFiles[i])) {
+            std::cerr << "Error loading emotion texture: " << emotionFiles[i] << std::endl;
+        }
+    }
 
     // Sample activity with tasks
     Activity activity;
@@ -283,22 +289,16 @@ int main() {
         topBar.setFillColor(sf::Color(240, 240, 250));
         window.draw(topBar);
 
-        // Emotion emoji
-        sf::Text emotion(getEmotionEmoji(activity.getEmotion()), font, 48);
-        emotion.setFillColor(sf::Color::Black);
-        emotion.setPosition(40, 15);
-        window.draw(emotion);
-
         // Activity title
         sf::Text title(activity.name, font, 32);
         title.setFillColor(sf::Color::Black);
-        title.setPosition(120, 15);
+        title.setPosition(40, 15);
         window.draw(title);
 
         // Activity info (category and due date)
         sf::Text info(activity.category + " - Due " + activity.dueDate, font, 14);
         info.setFillColor(sf::Color(150, 150, 150));
-        info.setPosition(120, 50);
+        info.setPosition(40, 50);
         window.draw(info);
 
         closeBtn.draw(window);
@@ -329,6 +329,15 @@ int main() {
         addTaskLabel.setFillColor(sf::Color(150, 150, 150));
         addTaskLabel.setPosition(40, 465);
         window.draw(addTaskLabel);
+
+        // Character
+        int emotionIndex = activity.getEmotion();
+        if (emotionIndex >= 0 && emotionIndex < 5) {
+            sf::Sprite emotionSprite(emotionTextures[emotionIndex]);
+            emotionSprite.setPosition(600,140);
+            emotionSprite.setScale(0.7f, 0.7f);
+            window.draw(emotionSprite);
+        }
 
         addTaskInput.draw(window);
         addTaskBtn.draw(window);

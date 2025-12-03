@@ -3,13 +3,13 @@
 
 #include <string>
 #include "SubTask.hpp"
-#include "DateHelper.hpp"
+//#include "DateHelper.hpp" indirectly inclyded through subtask.hpp
 
 using namespace std;
 
 class SimpleSubTask : public SubTask {
 public:
-    SimpleSubTask(string name, Date dueDate = Date());
+    SimpleSubTask(string name);
 
     string getType() const override;
     void display() const override;

@@ -13,9 +13,9 @@ User::~User() {
     tasks.clear();
 }
 
-void User::createTask(string title, string category) {
-    Task* newTask = new Task(title, category);
-    tasks.push_back(newTask);//push new task in verctor
+void User::createTask(string title, string category, Date dueDate) {
+    Task* newTask = new Task(title, category, dueDate); // Pass dueDate here
+    tasks.push_back(newTask);
     cout << "Task '" << title << "' created successfully!" << endl;
 }
 

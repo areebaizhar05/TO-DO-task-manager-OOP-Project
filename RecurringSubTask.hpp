@@ -13,7 +13,7 @@ protected:
     int completionCount; // how many times completed so far
     int targetCount; // how many times NEED to be completed in total
     Date startDate; // When the task started
-    
+    Date finalDueDate;
     virtual Date calculateNextDueDate() const = 0; // each child class will have its own duedate calculated
     virtual Date calculateFinalDueDate() const = 0; // auto-calculate final deadline
 
@@ -25,7 +25,7 @@ public:
     string getProgress() const override;
     void display() const override;
 
-    Date getNextDueDate() const override; // this is overridden from the subtask
+    Date getNextDueDate() const; // this is overridden from the subtask
     Date getFinalDueDate() const;
     
     virtual string getRecurrenceString() const = 0; // name of the type of recurrence

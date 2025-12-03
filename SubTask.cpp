@@ -3,10 +3,7 @@
 
 using namespace std;
 
-SubTask::SubTask(string name, Date dueDate)
-    : name(name), dueDate(dueDate), completed(false), priority(Priority::MEDIUM) {
-    calculatePriority();
-}
+SubTask::SubTask(string name): name(name), completed(false), priority(Priority::MEDIUM) {}
 
 void SubTask::markCompleted() {
     completed = true;
@@ -34,43 +31,43 @@ string SubTask::getPriorityString() const {
     }
 }
 
-void SubTask::calculatePriority() {//incorporate this when Date helper stuff starts working
-    if (!dueDate.isSet()) {
-        priority = Priority::MEDIUM;
-        return;
-    }
+// void SubTask::calculatePriority() {//incorporate this when Date helper stuff starts working
+//     if (!dueDate.isSet()) {
+//         priority = Priority::MEDIUM;
+//         return;
+//     }
     
-    int daysUntilDue = dueDate.daysUntil();
+//     int daysUntilDue = dueDate.daysUntil();
     
-    if (daysUntilDue < 0) {
-        priority = Priority::HIGH; // Overdue
-    } else if (daysUntilDue < 2) {
-        priority = Priority::HIGH;
-    } else if (daysUntilDue < 7) {
-        priority = Priority::MEDIUM;
-    } else {
-        priority = Priority::LOW;
-    }
-}
+//     if (daysUntilDue < 0) {
+//         priority = Priority::HIGH; // Overdue
+//     } else if (daysUntilDue < 2) {
+//         priority = Priority::HIGH;
+//     } else if (daysUntilDue < 7) {
+//         priority = Priority::MEDIUM;
+//     } else {
+//         priority = Priority::LOW;
+//     }
+// }
 
 void SubTask::display() const {
     string status = completed ? "✓" : "✗";
-    cout << status << " " << name << " [" << getPriorityString() << "]";
+    cout << status << " " << name << " [" << getPriorityString() << "]";}
     
-    if (dueDate.isSet()) {
-        cout << " (Due: " << dueDate.toString() << ")";
-    }
-}
+//     if (dueDate.isSet()) {
+//         cout << " (Due: " << dueDate.toString() << ")";
+//     }
+// }
 
-Date SubTask::getNextDueDate() const {
-    return dueDate;
-}
+// Date SubTask::getNextDueDate() const {
+//     return dueDate;
+// }
 
-Date SubTask::getDueDate() const {
-    return dueDate;
-}
+// Date SubTask::getDueDate() const {
+//     return dueDate;
+// }
 
-void SubTask::setDueDate(Date date) {
-    dueDate = date;
-    calculatePriority();
-}
+// void SubTask::setDueDate(Date date) {
+//     dueDate = date;
+//     calculatePriority();
+// }
